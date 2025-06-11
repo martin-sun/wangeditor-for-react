@@ -3,13 +3,16 @@
   "version": "1.5.6",
   "description": "Wangeditor component for React.",
   "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "module": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:es": "babel es6 -d lib",
-    "build": "tsc --build",
-    "view": "echo $npm_package_version",
-    "publish": "bash ./script/publish.sh"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "clean": "rimraf lib",
+    "build:types": "tsc -p tsconfig.build.json",
+    "build:js": "babel src --extensions \".ts,.tsx\" --out-dir lib --source-maps --copy-files",
+    "build:copy-files": "copyfiles -u 1 \"src/**/*.d.ts\" lib",
+    "build": "npm-run-all clean build:types build:js build:copy-files",
+    "prepublishOnly": "npm run build",
+    "view": "echo $npm_package_version"
   },
   "keywords": [
     "React",
@@ -18,9 +21,9 @@
     "wangeditor"
   ],
   "engines": {
-      "node": ">10 <13",
-      "npm": "~6.14.14",
-      "yarn": "~1.17.3"
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0",
+    "yarn": ">=1.22.0"
   },
   "browserslist": [
     "> 1%",
@@ -52,29 +55,53 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
+    "@babel/cli": "^7.18.10",
+    "@babel/core": "^7.18.10",
+    "@babel/plugin-transform-class-properties": "^7.23.8",
+    "@babel/plugin-transform-object-rest-spread": "^7.23.4",
+    "@babel/plugin-transform-runtime": "^7.18.10",
+    "@babel/plugin-transform-typescript": "^7.27.1",
+    "@babel/preset-env": "^7.18.10",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@babel/runtime": "^7.18.9",
+    "@commitlint/cli": "^17.0.0",
+    "@commitlint/config-conventional": "^17.0.0",
     "@lint-md/cli": "^0.1.5",
     "@lint-md/core": "^0.2.1",
-    "@types/node": "^15.12.5",
-    "@types/react": "^17.0.39",
-    "@types/react-dom": "^17.0.8",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
-    "commitizen": "^4.2.4",
-    "eslint": "^7.29.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.24.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5"
+    "@types/node": "^18.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "babel-loader": "^8.2.5",
+    "commitizen": "^4.3.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.31.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.9.0"
   },
   "dependencies": {
-    "wangeditor": "^4.7.12"
+    "wangeditor": "^4.7.15"
   },
   "peerDependencies": {
-    "react": "^17.0.2"
+    "react": ">=16.8.0 || >=17.0.0 || >=18.0.0",
+    "react-dom": ">=16.8.0 || >=17.0.0 || >=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
   }
 }

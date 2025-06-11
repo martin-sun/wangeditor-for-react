@@ -4,7 +4,7 @@
  * @Date: 2021-07-02 10:23:15
  * @LastEditTime: 2022-03-07 17:28:40
  */
-import React from 'react';
+import * as React from 'react';
 import WEditor from 'wangeditor';
 import createId from './utils/unique-id';
 import { isEmpty, difference, isEqualString } from './utils/helper';
@@ -16,10 +16,14 @@ interface IWEditor extends WEditor {
 	[key: string]: unknown;
 }
 
-export default class ReactWEditor extends React.PureComponent<
-	ReactWEProps,
-	Record<string, unknown>
-> {
+interface ReactWEditorState {
+	[key: string]: unknown;
+}
+
+export default class ReactWEditor extends React.PureComponent<ReactWEProps, ReactWEditorState> {
+	// Explicitly define props and state types
+	public declare readonly props: ReactWEProps;
+	public state: ReactWEditorState = {};
 	private readonly id = createId(8);
 	private hasCreated = false; // 是否执行 create 创建函数
 
@@ -29,15 +33,27 @@ export default class ReactWEditor extends React.PureComponent<
 	};
 
 	public editor: WEditor | null = null;
+	private _isMounted = false;
 
-	componentDidUpdate(nextProps: ReactWEProps) {
+	// This method is considered legacy and should be avoided in new code
+	// We'll keep it for backward compatibility but use componentDidUpdate for React 18
+	UNSAFE_componentWillReceiveProps(nextProps: ReactWEProps) {
 		const { value } = nextProps;
 
 		if (!isEqualString(value as string, this.props.value as string)) {
 			this.setContentByHTMLString(this.props.value);
 		}
 	}
+
+	componentDidUpdate(prevProps: ReactWEProps) {
+		const { value } = this.props;
+
+		if (!isEqualString(value as string, prevProps.value as string)) {
+			this.setContentByHTMLString(value);
+		}
+	}
 	componentDidMount(): void {
+		this._isMounted = true;
 		try {
 			this.init();
 			this.create();
@@ -47,8 +63,28 @@ export default class ReactWEditor extends React.PureComponent<
 	}
 
 	componentWillUnmount(): void {
+		// Mark component as unmounted
+		this._isMounted = false;
+		
+		// Clean up the editor
 		if (this.editor) {
 			this.editor.destroy();
+			this.editor = null;
+		}
+
+		// Clean up any Blob URLs
+		if (this.imgFile) {
+			this.imgFile.resetImgFiles();
+		}
+
+		// Revoke any object URLs that might have been created
+		if (this.imgFile) {
+			const imgFiles = this.imgFile.getAllImgFiles();
+			Object.keys(imgFiles).forEach(url => {
+				if (url.startsWith('blob:')) {
+					URL.revokeObjectURL(url);
+				}
+			});
 		}
 	}
 
@@ -284,15 +320,13 @@ export default class ReactWEditor extends React.PureComponent<
 	): string {
 		return replaceHTMLImgBlobURL(html, this.imgFile.getAllImgFiles(), callback);
 	}
-	render(): React.ReactElement {
+	render() {
 		const { style, className } = this.props;
-		return (
-			<div
-				style={style as React.CSSProperties}
-				className={className}
-				id={`editor-${this.id}`}
-			/>
-		);
+		return React.createElement('div', {
+			style: style as React.CSSProperties,
+			className,
+			id: `editor-${this.id}`
+		});
 	}
 
 	changeCreatedFlag = (flag: boolean): boolean => (this.hasCreated = flag);
