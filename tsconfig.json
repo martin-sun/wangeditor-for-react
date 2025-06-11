@@ -29,11 +29,14 @@
     "noFallthroughCasesInSwitch": true,
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "baseUrl": ".",
+    "paths": {
+      "wangeditor/*": ["node_modules/wangeditor/*"]
+    },
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "incremental": true,
-    "baseUrl": ".",
     "typeRoots": [
       "./node_modules/@types"
     ]
