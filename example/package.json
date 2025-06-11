@@ -8,7 +8,7 @@
 		"react-scripts": "5.0.1",
 		"typescript": "^4.9.5",
 		"wangeditor": "^4.7.15",
-		"wangeditor-for-react": "github:martin-sun/wangeditor-for-react"
+		"wangeditor-for-react": "file:.."
 	},
 	"scripts": {
 		"start": "react-scripts start",

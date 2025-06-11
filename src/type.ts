@@ -4,9 +4,10 @@
  * @Date: 2021-07-02 10:49:27
  * @LastEditTime: 2021-07-05 16:04:57
  */
-import { ConfigType } from 'wangeditor/dist/config';
-import langConfig from 'wangeditor/dist/config/lang';
-import WEditor from 'wangeditor/dist/editor';
+import WEditor from 'wangeditor';
+
+// 从 editor class instance 中推断 ConfigType
+type ConfigType = InstanceType<typeof WEditor>['config'];
 
 type hookType = Record<
 	string,
@@ -22,7 +23,7 @@ export type ReactWEProps = {
 	localBlobImg?: boolean;
 	placeholder?: string;
 	value?: string;
-	languages?: typeof langConfig;
+	languages?: Record<string, string>;
 	instanceHook?: hookType;
 	globalHook?: hookType;
 
