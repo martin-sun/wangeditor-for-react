@@ -51,5 +51,4 @@ yarn.lock
 examples
 stories
 test
-/lib
 /dist
