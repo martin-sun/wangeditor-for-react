@@ -4,12 +4,13 @@
 	"description": "Wangeditor component for React.",
 	"main": "lib/index.js",
 	"module": "lib/index.js",
+	"types": "lib/types/index.d.ts",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 0",
 		"clean": "rimraf lib",
 		"build:types": "tsc -p tsconfig.build.json",
 		"build:js": "babel src --extensions \".ts,.tsx\" --out-dir lib --source-maps --copy-files",
-		"build:copy-files": "copyfiles -u 1 \"src/**/*.d.ts\" lib",
+		"build:copy-files": "copyfiles -u 1 \"src/**/*.d.ts\" lib/types",
 		"build": "npm-run-all clean build:types build:js build:copy-files",
 		"prepublishOnly": "npm run build",
 		"view": "echo $npm_package_version"
