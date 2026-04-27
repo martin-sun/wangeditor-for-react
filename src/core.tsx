@@ -35,16 +35,6 @@ export default class ReactWEditor extends React.PureComponent<ReactWEProps, Reac
 	public editor: WEditor | null = null;
 	private _isMounted = false;
 
-	// This method is considered legacy and should be avoided in new code
-	// We'll keep it for backward compatibility but use componentDidUpdate for React 18
-	UNSAFE_componentWillReceiveProps(nextProps: ReactWEProps) {
-		const { value } = nextProps;
-
-		if (!isEqualString(value as string, this.props.value as string)) {
-			this.setContentByHTMLString(this.props.value);
-		}
-	}
-
 	componentDidUpdate(prevProps: ReactWEProps) {
 		const { value } = this.props;
 

@@ -16,8 +16,7 @@ module.exports = {
     // 其他插件
     '@babel/plugin-transform-class-properties',
     '@babel/plugin-transform-object-rest-spread',
-    ['@babel/plugin-transform-runtime', {
-      regenerator: true
-    }],
+    // NOTE: transform-runtime removed to avoid @babel/runtime peer dependency.
+    // With only ~8 source files, helper duplication is negligible.
   ],
 };

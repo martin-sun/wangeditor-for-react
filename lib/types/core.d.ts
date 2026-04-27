@@ -14,7 +14,6 @@ export default class ReactWEditor extends React.PureComponent<ReactWEProps, Reac
     protected defaultConfig: Record<string, unknown>;
     editor: WEditor | null;
     private _isMounted;
-    UNSAFE_componentWillReceiveProps(nextProps: ReactWEProps): void;
     componentDidUpdate(prevProps: ReactWEProps): void;
     componentDidMount(): void;
     componentWillUnmount(): void;
